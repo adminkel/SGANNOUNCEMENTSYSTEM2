@@ -31,4 +31,14 @@
         android:textColor="@color/green_secondary"
         android:textSize="20sp" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="128dp"
+        android:layout_height="213dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="123dp"
+        android:layout_marginBottom="155dp"
+        app:srcCompat="@drawable/admin" />
+
 </RelativeLayout>
