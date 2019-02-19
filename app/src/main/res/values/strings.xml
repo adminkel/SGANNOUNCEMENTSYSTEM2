@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SGANNOUNCEMENTSYSTEM</string>
+    <string name="administrator"><u>ADMINISTRATOR</u></string>
 </resources>

@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         mAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Admin was Clicked", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
             }
         });
 
