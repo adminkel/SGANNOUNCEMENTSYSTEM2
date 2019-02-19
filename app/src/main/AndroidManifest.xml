@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".StudentActivity"></activity>
+        <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".StudentActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".FlashScreen">
             <intent-filter>
