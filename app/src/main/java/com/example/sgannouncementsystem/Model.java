@@ -11,7 +11,7 @@ public class Model {
     String admin;
     @ServerTimestamp Date time;
 
-    public Model(String id, String announcement_title, String announcement_details, Date timestamp, String admin) {
+    public Model() {
     }
 
     public Model(String id, String title, String details, String admin, Date time) {

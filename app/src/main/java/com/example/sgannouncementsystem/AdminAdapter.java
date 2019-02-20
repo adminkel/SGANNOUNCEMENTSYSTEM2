@@ -38,7 +38,7 @@ public class AdminAdapter extends RecyclerView.Adapter<ViewHolder> {
                 SimpleDateFormat spf = new SimpleDateFormat("MMM dd, yyyy HH:mm");
                 String date = spf.format(modelList.get(position).getTime());
 
-                /*Intent intent = new Intent(adminActivity, AnnouncementDisplay.class);
+                Intent intent = new Intent(adminActivity, AnnouncementDisplay.class);
 
                 intent.putExtra("pId", id);
                 intent.putExtra("pTitle", title);
@@ -46,7 +46,7 @@ public class AdminAdapter extends RecyclerView.Adapter<ViewHolder> {
                 intent.putExtra("pDetails", details);
                 intent.putExtra("pDate", date);
 
-                adminActivity.startActivity(intent);*/
+                adminActivity.startActivity(intent);
             }
 
             @Override

@@ -130,8 +130,8 @@ public class AdminActivity extends AppCompatActivity
                             Model model = new Model(doc.getString("id"),
                                     doc.getString("Announcement Title"),
                                     doc.getString("Announcement Details"),
-                                    doc.getDate("Timestamp"),
-                                    doc.getString("Admin"));
+                                    doc.getString("Admin"),
+                                    doc.getDate("Timestamp"));
                             modelList.add(model);
                         }
 
@@ -262,6 +262,23 @@ public class AdminActivity extends AppCompatActivity
 
     @Override
     public void onRefresh() {
+        checkConnection();
+    }
 
+    public boolean checkConnection() {
+        if (isOnline()){
+            clearData();
+            showData();
+            return InternetCheck;
+        }else {
+            InternetCheck=false;
+            Toast.makeText(AdminActivity.this,"Problem reloading data:\nPlease check your Internet connection.",
+                    Toast.LENGTH_SHORT).show();
+            return InternetCheck;
+        }
+    }
+
+    private void clearData() {
+        adapter.clear();
     }
 }
