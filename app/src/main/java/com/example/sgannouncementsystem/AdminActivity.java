@@ -122,7 +122,8 @@ public class AdminActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_compose) {
-            // Handle the camera action
+            Intent i = new Intent(AdminActivity.this, ComposeActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_edit) {
 
         } else if (id == R.id.nav_delete) {
