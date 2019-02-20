@@ -1,5 +1,6 @@
 package com.example.sgannouncementsystem;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,8 +8,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,18 +26,39 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "AdminActivity";
 
     private boolean InternetCheck = true;
 
+    private ProgressDialog pd;
+
+    List<Model> modelList = new ArrayList<>();
+    RecyclerView mRecyclerView;
+    AdminAdapter adapter;
+
+    RecyclerView.LayoutManager layoutManager;
+
+    FirebaseFirestore db;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +70,31 @@ public class AdminActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        db = FirebaseFirestore.getInstance();
+
+        pd = new ProgressDialog(this);
+
+        mRecyclerView = findViewById(R.id.recycler_view);
+
+        mRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.green_tertiary);
+
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (swipeRefreshLayout != null){
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+                showData();
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setBackgroundColor(Color.parseColor("#FB7125"));
@@ -63,6 +114,43 @@ public class AdminActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void showData() {
+        swipeRefreshLayout.setRefreshing(true);
+
+
+        db.collection("Announcements").orderBy("Timestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            Model model = new Model(doc.getString("id"),
+                                    doc.getString("Announcement Title"),
+                                    doc.getString("Announcement Details"),
+                                    doc.getDate("Timestamp"),
+                                    doc.getString("Admin"));
+                            modelList.add(model);
+                        }
+
+                        adapter = new AdminAdapter(AdminActivity.this, modelList);
+
+                        mRecyclerView.setAdapter(adapter);
+                        swipeRefreshLayout.setRefreshing(false);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(AdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
     boolean twice = false;
@@ -170,5 +258,10 @@ public class AdminActivity extends AppCompatActivity
             //swipeRefreshLayout.setRefreshing(false);
             return false;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }
