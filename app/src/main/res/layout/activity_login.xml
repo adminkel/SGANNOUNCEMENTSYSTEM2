@@ -39,7 +39,7 @@
             android:layout_marginEnd="0dp"
             android:text="@string/administrator"
             android:textAlignment="center"
-            android:textColor="@color/green_secondary"
+            android:textColor="@color/green_tertiary"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -73,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
+                android:backgroundTint="@color/green_tertiary"
                 android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
@@ -95,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
+                android:backgroundTint="@color/green_tertiary"
                 android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
@@ -127,7 +129,7 @@
             android:layout_marginBottom="22dp"
             android:text="Forgot password?"
             android:textAlignment="center"
-            android:textColor="@color/green_secondary"
+            android:textColor="@color/green_tertiary"
             android:textStyle="bold" />
 
     </RelativeLayout>

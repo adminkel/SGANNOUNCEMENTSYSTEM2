@@ -11,9 +11,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -185,7 +187,99 @@ public class AdminActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.admin, menu);
-        return true;
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setBackgroundResource(R.drawable.search_background);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                searchData(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                searchDataAuto(s);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void searchData(String s) {
+        pd.setMessage("Searching...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+
+        db.collection("Announcements").orderBy("Search")
+                .startAt(s)
+                .endAt(s + "\uf8ff")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        modelList.clear();
+                        pd.dismiss();
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            Model model = new Model(doc.getString("id"),
+                                    doc.getString("Announcement Title"),
+                                    doc.getString("Announcement Details"),
+                                    doc.getString("Admin"),
+                                    doc.getDate("Timestamp"));
+                            modelList.add(model);
+                        }
+
+                        adapter = new AdminAdapter(AdminActivity.this, modelList);
+                        mRecyclerView.setAdapter(adapter);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        pd.dismiss();
+                        Toast.makeText(AdminActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+    private void searchDataAuto(String s) {
+
+        db.collection("Announcements").orderBy("Search")
+                .startAt(s)
+                .endAt(s + "\uf8ff")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        modelList.clear();
+
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            Model model = new Model(doc.getString("id"),
+                                    doc.getString("Announcement Title"),
+                                    doc.getString("Announcement Details"),
+                                    doc.getString("Admin"),
+                                    doc.getDate("Timestamp"));
+                            modelList.add(model);
+                        }
+
+                        adapter = new AdminAdapter(AdminActivity.this, modelList);
+                        mRecyclerView.setAdapter(adapter);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Toast.makeText(AdminActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+
+                    }
+                });
     }
 
     @Override
@@ -198,9 +292,16 @@ public class AdminActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_signout) {
             connectionCheck();
+        }else if (id == R.id.action_changePass){
+            changePassDialog();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void changePassDialog(){
+        ChangePassword changePassword = new ChangePassword();
+        changePassword.show(getSupportFragmentManager(), "ChangePassword Dialog");
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

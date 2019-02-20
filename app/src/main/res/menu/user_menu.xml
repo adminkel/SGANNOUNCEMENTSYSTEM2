@@ -4,20 +4,15 @@
 
     <item
         android:id="@+id/action_search"
+        android:title="search"
         android:icon="@drawable/ic_search"
-        android:title="admin"
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
-        android:id="@+id/action_changePass"
-        android:orderInCategory="100"
-        android:title="Change password"
-        app:showAsAction="never" />
+        android:id="@+id/action_admin"
+        android:icon="@drawable/ic_account_circle"
+        android:title="admin"
+        app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_signout"
-        android:orderInCategory="200"
-        android:title="Sign out"
-        app:showAsAction="never" />
 </menu>
