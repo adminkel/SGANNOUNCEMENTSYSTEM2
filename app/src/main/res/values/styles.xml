@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/green_tertiary</item>
-        <item name="colorPrimaryDark">@color/green_primary</item>
+        <item name="colorPrimaryDark">@color/green_secondary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 

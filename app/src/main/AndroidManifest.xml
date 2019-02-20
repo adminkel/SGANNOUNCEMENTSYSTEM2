@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".LoggingoutActivity"></activity>
+        <activity android:name=".ComposeActivity"></activity>
+        <activity android:name=".LoggingoutActivity" />
         <activity
             android:name=".AdminActivity"
             android:label="@string/title_activity_admin"
