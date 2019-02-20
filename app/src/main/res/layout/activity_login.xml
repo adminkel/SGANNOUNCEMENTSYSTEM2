@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:background="@color/green_secondary"
+        android:background="@color/green_tertiary"
         app:srcCompat="@drawable/applogo" />
 
     <RelativeLayout
@@ -87,7 +87,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="9dp"
-            android:layout_marginBottom="9dp">
+            android:layout_marginBottom="9dp"
+            app:passwordToggleEnabled="true">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/etPassword"

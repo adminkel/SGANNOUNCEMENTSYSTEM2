@@ -6,6 +6,7 @@
 
     <color name="green_primary">#006135</color>
     <color name="green_secondary">#187e38</color>
+    <color name="green_tertiary">#318333</color>
     <color name="white">#ffffff</color>
-    <color name="orange">#FB7125</color>
+    <color name="orange">#d4582c</color>
 </resources>

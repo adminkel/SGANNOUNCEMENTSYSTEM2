@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".AdminActivity"
+    android:background="@drawable/sg_login"
     tools:showIn="@layout/app_bar_admin">
 
 </android.support.constraint.ConstraintLayout>
