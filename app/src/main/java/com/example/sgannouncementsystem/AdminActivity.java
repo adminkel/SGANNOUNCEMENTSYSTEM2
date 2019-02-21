@@ -121,8 +121,8 @@ public class AdminActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FabCompose fabCompose = new FabCompose();
+                fabCompose.show(getSupportFragmentManager(), "Compose Dialog");
             }
         });
 
@@ -347,7 +347,8 @@ public class AdminActivity extends AppCompatActivity
         } else if (id == R.id.nav_VM) {
 
         } else if (id == R.id.nav_about) {
-
+            Intent i = new Intent(AdminActivity.this, AboutActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_contact) {
 
         }
