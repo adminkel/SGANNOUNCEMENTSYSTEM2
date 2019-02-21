@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".DeleteActivity"></activity>
+        <activity android:name=".UpdatingActivity"></activity>
+        <activity android:name=".UpdateActivity" />
+        <activity android:name=".DeleteActivity" />
         <activity android:name=".AnnouncementDisplay" />
         <activity android:name=".ComposeActivity" />
         <activity android:name=".LoggingoutActivity" />

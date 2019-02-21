@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +52,8 @@ public class AdminActivity extends AppCompatActivity
     private boolean InternetCheck = true;
 
     private ProgressDialog pd;
+
+    static String LoggedIn_User_Email;
 
     List<Model> modelList = new ArrayList<>();
     RecyclerView mRecyclerView;
@@ -69,6 +74,11 @@ public class AdminActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
+        LoggedIn_User_Email = mUser.getEmail();
+
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),"Signed in: "+LoggedIn_User_Email,Snackbar.LENGTH_SHORT);
+        snackbar.show();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -116,6 +126,13 @@ public class AdminActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        navigationView.setNavigationItemSelectedListener(this);
+        TextView text = (TextView) header.findViewById(R.id.tvAdmin);
+
+        FirebaseUser auth = FirebaseAuth.getInstance().getCurrentUser();
+
+        text.setText(auth.getEmail());
     }
 
     private void showData() {
@@ -314,7 +331,8 @@ public class AdminActivity extends AppCompatActivity
             Intent i = new Intent(AdminActivity.this, ComposeActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_edit) {
-
+            Intent i = new Intent(AdminActivity.this, UpdateActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_delete) {
             Intent i = new Intent(AdminActivity.this, DeleteActivity.class);
             startActivity(i);
