@@ -1,3 +1,17 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/'}
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.1'
+    }
+}
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
+repositories {
+    maven { url 'https://maven.google.com' }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
@@ -5,6 +19,13 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.sgannouncementsystem"
+
+        manifestPlaceholders = [
+                onesignal_app_id: '705c47c3-d8c0-46b6-94b8-4ec95f2f784b',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+        ]
+
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
@@ -29,16 +50,24 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
+    //Firebase Implementation
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-core:16.0.7'
-
+    //Design Library Implementation
     implementation 'com.android.support:design:28.0.0'
-
+    //Multidex Implementation
     implementation 'com.android.support:multidex:1.0.3'
-
+    //RecyclerView & CardView Implementation
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
+    //OneSignal Implementation
+    implementation 'com.onesignal:OneSignal:3.10.6'
+    //noinspection GradleCompatible
+    implementation 'com.google.android.gms:play-services-gcm:16.0.0'
+    //For Geotagging
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    //Required to Receive Notification
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

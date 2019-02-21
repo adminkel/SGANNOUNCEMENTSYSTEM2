@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.onesignal.OneSignal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +54,24 @@ public class StudentActivity extends AppCompatActivity implements SwipeRefreshLa
 
     private boolean InternetCheck = true;
 
+    static String LoggedIn_User_Email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+
+        LoggedIn_User_Email = user.getEmail();
+
+        OneSignal.sendTag("User_ID", LoggedIn_User_Email);
 
         signOut();
 

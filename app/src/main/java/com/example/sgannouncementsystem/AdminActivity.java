@@ -38,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.onesignal.OneSignal;
 
 import org.w3c.dom.Text;
 
@@ -72,10 +73,17 @@ public class AdminActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
+
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
         LoggedIn_User_Email = mUser.getEmail();
+
+        OneSignal.sendTag("User_ID", LoggedIn_User_Email);
 
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),"Signed in: "+LoggedIn_User_Email,Snackbar.LENGTH_SHORT);
         snackbar.show();
