@@ -55,6 +55,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         hideSoftKeyboard();
 
+        mForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, ForgotPassword.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     @Override
