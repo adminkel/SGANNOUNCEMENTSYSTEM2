@@ -316,7 +316,8 @@ public class AdminActivity extends AppCompatActivity
         } else if (id == R.id.nav_edit) {
 
         } else if (id == R.id.nav_delete) {
-
+            Intent i = new Intent(AdminActivity.this, DeleteActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_VM) {
 
         } else if (id == R.id.nav_about) {
