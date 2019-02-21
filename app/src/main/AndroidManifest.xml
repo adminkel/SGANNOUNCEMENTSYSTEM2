@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".ContactActivity"></activity>
+        <activity android:name=".AboutActivity" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".UpdatingActivity" />
         <activity android:name=".UpdateActivity" />

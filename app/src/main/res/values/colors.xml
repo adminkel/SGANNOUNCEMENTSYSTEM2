@@ -9,4 +9,6 @@
     <color name="green_tertiary">#318333</color>
     <color name="white">#ffffff</color>
     <color name="orange">#d4582c</color>
+    <color name="violet">#6a00ff</color>
+    <color name="blue">#0a00ff</color>
 </resources>

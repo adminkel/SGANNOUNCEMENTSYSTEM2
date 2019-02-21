@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,9 +54,14 @@ public class StudentActivity extends AppCompatActivity implements SwipeRefreshLa
 
     SwipeRefreshLayout swipeRefreshLayout;
 
+    FloatingActionButton mfab_menu, mfab_contact, mfab_about, mfab_flag;
+    Animation fabOpen, fabClose, fabRClockwise, fabCClockwise;
+
     private ProgressDialog pd;
 
     private boolean InternetCheck = true;
+
+    boolean isOpen = false;
 
     static String LoggedIn_User_Email;
 
@@ -80,7 +89,6 @@ public class StudentActivity extends AppCompatActivity implements SwipeRefreshLa
 
         db = FirebaseFirestore.getInstance();
 
-
         pd = new ProgressDialog(this);
 
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -106,6 +114,60 @@ public class StudentActivity extends AppCompatActivity implements SwipeRefreshLa
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mfab_menu = (FloatingActionButton)findViewById(R.id.fab_menu);
+        mfab_contact = (FloatingActionButton)findViewById(R.id.fab_contact);
+        mfab_about = (FloatingActionButton)findViewById(R.id.fab_about);
+        mfab_flag = (FloatingActionButton)findViewById(R.id.fab_flag);
+
+        fabOpen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        fabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
+        fabCClockwise = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_counter_clockwise);
+
+        mfab_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isOpen){
+
+                    mfab_contact.startAnimation(fabClose);
+                    mfab_about.startAnimation(fabClose);
+                    mfab_flag.startAnimation(fabClose);
+                    mfab_menu.startAnimation(fabCClockwise);
+                    mfab_flag.setClickable(false);
+                    mfab_about.setClickable(false);
+                    mfab_contact.setClickable(false);
+                    isOpen = false;
+
+                }else {
+
+                    mfab_contact.startAnimation(fabOpen);
+                    mfab_about.startAnimation(fabOpen);
+                    mfab_flag.startAnimation(fabOpen);
+                    mfab_menu.startAnimation(fabRClockwise);
+                    mfab_flag.setClickable(true);
+                    mfab_about.setClickable(true);
+                    mfab_contact.setClickable(true);
+                    isOpen = true;
+                }
+            }
+        });
+
+        mfab_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(StudentActivity.this, ContactActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mfab_about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(StudentActivity.this, AboutActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void showData() {

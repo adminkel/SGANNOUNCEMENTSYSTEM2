@@ -33,4 +33,59 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="225dp"
+        android:src="@drawable/fab_flag"
+        android:elevation="6dp"
+        android:id="@+id/fab_flag"
+        app:backgroundTint="@color/green_tertiary"
+        app:pressedTranslationZ="12dp"
+        android:visibility="invisible"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="160dp"
+        android:src="@drawable/fab_contact"
+        android:elevation="6dp"
+        android:id="@+id/fab_about"
+        app:backgroundTint="@color/violet"
+        app:pressedTranslationZ="12dp"
+        android:visibility="invisible"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="95dp"
+        android:src="@drawable/fab_contact"
+        android:elevation="6dp"
+        android:id="@+id/fab_contact"
+        app:backgroundTint="@color/blue"
+        app:pressedTranslationZ="12dp"
+        android:visibility="invisible"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:src="@drawable/fab_menu"
+        android:elevation="6dp"
+        android:id="@+id/fab_menu"
+        app:backgroundTint="@color/orange"
+        app:pressedTranslationZ="12dp"
+        />
+
 </android.support.design.widget.CoordinatorLayout>

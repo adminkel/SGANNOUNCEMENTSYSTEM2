@@ -350,7 +350,8 @@ public class AdminActivity extends AppCompatActivity
             Intent i = new Intent(AdminActivity.this, AboutActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_contact) {
-
+            Intent i = new Intent(AdminActivity.this, ContactActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
