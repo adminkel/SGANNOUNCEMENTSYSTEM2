@@ -168,6 +168,14 @@ public class StudentActivity extends AppCompatActivity implements SwipeRefreshLa
                 startActivity(i);
             }
         });
+
+        mfab_flag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(StudentActivity.this, VisionMission.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void showData() {

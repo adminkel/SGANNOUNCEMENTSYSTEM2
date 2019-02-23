@@ -345,7 +345,8 @@ public class AdminActivity extends AppCompatActivity
             Intent i = new Intent(AdminActivity.this, DeleteActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_VM) {
-
+            Intent i = new Intent(AdminActivity.this, VisionMission.class);
+            startActivity(i);
         } else if (id == R.id.nav_about) {
             Intent i = new Intent(AdminActivity.this, AboutActivity.class);
             startActivity(i);
