@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -18,7 +17,9 @@ public class StudentAdapter extends RecyclerView.Adapter<ViewHolder> {
     public StudentAdapter(StudentActivity studentActivity, List<Model> modelList) {
         this.studentActivity = studentActivity;
         this.modelList = modelList;
+
     }
+
 
     @NonNull
     @Override
