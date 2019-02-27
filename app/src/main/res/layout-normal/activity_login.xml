@@ -48,6 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/textInput2"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="122dp">
 
@@ -65,6 +67,9 @@
             android:id="@+id/textInput2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
             app:passwordToggleEnabled="true"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="186dp">
@@ -85,6 +90,9 @@
             android:layout_height="wrap_content"
             android:background="@color/orange"
             android:text="Sign in"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
             android:textColor="@color/white"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="253dp" />
@@ -97,6 +105,7 @@
             android:textAlignment="center"
             android:textColor="@color/green_tertiary"
             android:textStyle="bold"
+            android:layout_marginTop="10dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="312dp" />
 
