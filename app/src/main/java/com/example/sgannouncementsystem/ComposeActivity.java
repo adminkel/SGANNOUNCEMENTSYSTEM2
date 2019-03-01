@@ -1,32 +1,52 @@
 package com.example.sgannouncementsystem;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContentResolverCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Scroller;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -41,10 +61,21 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText cTitle;
     private EditText cDetails;
     private Button cPost;
+    private ImageView cImage;
+    private ProgressBar cProgress;
 
     private ProgressDialog pd;
 
+    private Uri cImageUri;
+
     private boolean InternetCheck = true;
+
+    public static final int PICK_IMAGE_REQUEST  = 1;
+
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+
+    private StorageTask mUploadTask;
 
     Toolbar toolbar;
 
@@ -65,9 +96,14 @@ public class ComposeActivity extends AppCompatActivity {
         cDetails.setVerticalScrollBarEnabled(true);
         cDetails.setMaxLines(20);
         cPost = findViewById(R.id.btnPost);
+        cImage = findViewById(R.id.ivPhoto);
+        cProgress = findViewById(R.id.progress_bar);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,11 +124,19 @@ public class ComposeActivity extends AppCompatActivity {
                 String title = cTitle.getText().toString();
                 String details = cDetails.getText().toString().trim();
 
+
                 if (title.isEmpty()|| details.isEmpty() ){
                     Toast.makeText(ComposeActivity.this,"Please fill the empty fields",Toast.LENGTH_SHORT).show();
+                }else if (cImage.getDrawable() == null){
+                    Toast.makeText(ComposeActivity.this,"Please select a picture",Toast.LENGTH_SHORT).show();
                 }else if (isOnline()){
-                    uploadData(title, details);
-                    sendNotification();
+                    if (mUploadTask != null && mUploadTask.isInProgress()){
+                        Toast.makeText(ComposeActivity.this, "Upload in progress", Toast.LENGTH_SHORT).show();
+                    }else {
+                        uploadData(title, details);
+                        uploadFile();
+                        sendNotification();
+                    }
                 }
                 else {
                     checkConnection();
@@ -103,14 +147,94 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.insert_photo, menu);
+
+        MenuItem item = menu.findItem(R.id.action_addPhoto);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == android.R.id.home){
             this.finish();
+        } else if (id == R.id.action_addPhoto){
+            addPhoto();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addPhoto() {
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(i, PICK_IMAGE_REQUEST);
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+            cImageUri = data.getData();
+
+            Picasso.with(this).load(cImageUri).into(cImage);
+        }
+    }
+
+    private String getFileExtension(Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile() {
+        if (cImageUri != null){
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(cImageUri));
+
+            mUploadTask = fileReference.putFile(cImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cProgress.setProgress(0);
+                                    ComposeActivity.this.finish();
+                                }
+                            }, 5000);
+
+                            Toast.makeText(ComposeActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
+                            Upload upload = new Upload(cTitle.getText().toString().trim(),taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+
+                            String uploadId = mDatabaseRef.push().getKey();
+                            mDatabaseRef.child(uploadId).setValue(upload);
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(ComposeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    cProgress.setProgress((int) progress);
+
+                }
+            });
+        }else {
+            Toast.makeText(this, "No photo attached", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void uploadData(String title, String details) {
@@ -133,9 +257,7 @@ public class ComposeActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        pd.dismiss();
-                        Toast.makeText(ComposeActivity.this,"Announcement Posted",Toast.LENGTH_SHORT).show();
-                        ComposeActivity.this.finish();
+                        Toast.makeText(ComposeActivity.this,"Uploading picture...",Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -220,7 +220,7 @@ public class StudentActivity extends AppCompatActivity implements SwipeRefreshLa
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+        public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.user_menu, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
