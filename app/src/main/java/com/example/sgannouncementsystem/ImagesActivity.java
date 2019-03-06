@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnTouchListener {
 
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
@@ -145,5 +147,10 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
                     Toast.LENGTH_SHORT).show();
             return InternetCheck;
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
     }
 }

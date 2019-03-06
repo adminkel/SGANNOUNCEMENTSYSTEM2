@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/green_tertiary">
 
         <TextView
             android:id="@+id/text_view_name"
@@ -17,13 +18,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="Name"
-            android:textColor="@color/green_tertiary"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/image_upload"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="300dp"
+            android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
 

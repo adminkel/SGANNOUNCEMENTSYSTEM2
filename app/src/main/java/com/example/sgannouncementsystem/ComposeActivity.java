@@ -98,11 +98,10 @@ public class ComposeActivity extends AppCompatActivity {
         cDetails = findViewById(R.id.Details);
         cDetails.setScroller(new Scroller(this));
         cDetails.setVerticalScrollBarEnabled(true);
-        cDetails.setMaxLines(20);
+        cDetails.setMaxLines(10);
         cPost = findViewById(R.id.btnPost);
         cImage = findViewById(R.id.ivPhoto);
         cProgress = findViewById(R.id.progress_bar);
-
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 

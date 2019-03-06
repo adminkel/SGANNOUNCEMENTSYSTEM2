@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,11 +35,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int i) {
         Upload uploadCurrent = mUploads.get(i);
         imageViewHolder.textViewName.setText(uploadCurrent.getName());
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(uploadCurrent.getImageUrl())
                 .placeholder(R.drawable.sg_login)
-                .fit()
-                .centerCrop()
+                .override(500, 500)
                 .into(imageViewHolder.imageView);
     }
 

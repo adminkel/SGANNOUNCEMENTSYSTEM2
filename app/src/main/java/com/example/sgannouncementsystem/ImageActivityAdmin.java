@@ -1,10 +1,15 @@
 package com.example.sgannouncementsystem;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +32,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import dmax.dialog.SpotsDialog;
 
 public class ImageActivityAdmin extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ImageAdapterAdmin.OnItemClickListener {
 
@@ -40,10 +49,29 @@ public class ImageActivityAdmin extends AppCompatActivity implements SwipeRefres
 
     private boolean InternetCheck = true;
 
+    public static final int PERMISSION_REQUEST_CODE = 1000;
+
     SwipeRefreshLayout swipeRefreshLayout;
 
     Toolbar toolbar;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case PERMISSION_REQUEST_CODE:
+            {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+                break;
+        }
+    }
+
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +169,6 @@ public class ImageActivityAdmin extends AppCompatActivity implements SwipeRefres
             }
         });
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

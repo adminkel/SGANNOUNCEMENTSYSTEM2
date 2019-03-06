@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -38,13 +39,12 @@ public class ImageAdapterAdmin extends RecyclerView.Adapter<ImageAdapterAdmin.Im
     public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int i) {
         Upload uploadCurrent = mUploads.get(i);
         imageViewHolder.textViewName.setText(uploadCurrent.getName());
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(uploadCurrent.getImageUrl())
                 .placeholder(R.drawable.sg_login)
-                .fit()
-                .centerCrop()
+                .override(500, 500)
                 .into(imageViewHolder.imageView);
-    }
+            }
 
     @Override
     public int getItemCount() {
@@ -80,8 +80,8 @@ public class ImageAdapterAdmin extends RecyclerView.Adapter<ImageAdapterAdmin.Im
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle("Select Action");
             MenuItem delete = menu.add(Menu.NONE, 1, 1, "Delete");
-
             delete.setOnMenuItemClickListener(this);
+
         }
 
         @Override
