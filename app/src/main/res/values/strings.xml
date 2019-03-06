@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SGANNOUNCEMENTSYSTEM</string>
+    <string name="app_name">ABAS</string>
     <string name="administrator"><u>ADMINISTRATOR</u></string>
     <string name="title_activity_admin"><b>ANNOUNCEMENT</b></string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

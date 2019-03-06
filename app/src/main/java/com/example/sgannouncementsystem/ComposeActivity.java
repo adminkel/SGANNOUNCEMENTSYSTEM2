@@ -98,7 +98,7 @@ public class ComposeActivity extends AppCompatActivity {
         cDetails = findViewById(R.id.Details);
         cDetails.setScroller(new Scroller(this));
         cDetails.setVerticalScrollBarEnabled(true);
-        cDetails.setMaxLines(10);
+        cDetails.setMaxLines(6);
         cPost = findViewById(R.id.btnPost);
         cImage = findViewById(R.id.ivPhoto);
         cProgress = findViewById(R.id.progress_bar);
