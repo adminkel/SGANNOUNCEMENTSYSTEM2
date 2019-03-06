@@ -16,6 +16,10 @@
             android:id="@+id/nav_delete"
             android:icon="@drawable/ic_delete"
             android:title="Delete" />
+        <item
+            android:id="@+id/nav_images"
+            android:icon="@drawable/ic_image"
+            android:title="Images" />
     </group>
 
     <item android:title="Extras">

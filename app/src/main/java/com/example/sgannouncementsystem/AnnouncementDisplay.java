@@ -1,15 +1,17 @@
 package com.example.sgannouncementsystem;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class AnnouncementDisplay extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private TextView aTitle, aAdmin, aDetails, aDate;
+    private TextView aTitle, aAdmin, aDetails, aDate, aShowImg;
 
     String pId, pTitle, pAdmin, pDetails, pDate;
 
@@ -24,6 +26,7 @@ public class AnnouncementDisplay extends AppCompatActivity implements SwipeRefre
         aAdmin = findViewById(R.id.Admin);
         aDetails = findViewById(R.id.Details);
         aDate = findViewById(R.id.Date);
+        aShowImg = findViewById(R.id.tvShowImage);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -43,6 +46,14 @@ public class AnnouncementDisplay extends AppCompatActivity implements SwipeRefre
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        aShowImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AnnouncementDisplay.this, ImagesActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 

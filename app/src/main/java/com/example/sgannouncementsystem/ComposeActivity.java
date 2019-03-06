@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +41,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.Tag;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -71,6 +74,7 @@ public class ComposeActivity extends AppCompatActivity {
     private boolean InternetCheck = true;
 
     public static final int PICK_IMAGE_REQUEST  = 1;
+    private static final String TAG = "Something";
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
@@ -152,7 +156,6 @@ public class ComposeActivity extends AppCompatActivity {
 
         MenuItem item = menu.findItem(R.id.action_addPhoto);
 
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -175,7 +178,6 @@ public class ComposeActivity extends AppCompatActivity {
         i.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(i, PICK_IMAGE_REQUEST);
 
-
     }
 
     @Override
@@ -197,12 +199,21 @@ public class ComposeActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if (cImageUri != null){
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(cImageUri));
 
-            mUploadTask = fileReference.putFile(cImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(cImageUri));
+
+            mUploadTask = fileReference.putFile(cImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(Uri uri) {
+
+                            String fileUrl;
+
+                            Uri downloadUrl = uri;
+                            fileUrl = downloadUrl.toString();
+
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -212,14 +223,17 @@ public class ComposeActivity extends AppCompatActivity {
                                 }
                             }, 5000);
 
+                            Log.d(TAG, "onSuccess: uri="+ uri.toString());
                             Toast.makeText(ComposeActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
-                            Upload upload = new Upload(cTitle.getText().toString().trim(),taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-
+                            Upload upload = new Upload(cTitle.getText().toString().trim(),
+                                    fileUrl);
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload);
-
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
+                    });
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(ComposeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -229,9 +243,9 @@ public class ComposeActivity extends AppCompatActivity {
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                     cProgress.setProgress((int) progress);
-
                 }
             });
+
         }else {
             Toast.makeText(this, "No photo attached", Toast.LENGTH_SHORT).show();
         }

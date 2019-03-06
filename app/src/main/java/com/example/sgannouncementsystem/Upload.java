@@ -1,33 +1,44 @@
 package com.example.sgannouncementsystem;
 
+import com.google.firebase.database.Exclude;
+
 public class Upload {
     private String mName;
     private String mImageUrl;
+    private String mKey;
 
     public Upload() {
+
     }
 
-    public Upload(String mName, String mImageUrl) {
-        if (mName.trim().equals("")){
-            mName = "No Name";
-        }
-        this.mName = mName;
-        this.mImageUrl = mImageUrl;
+    public Upload(String name, String imageUrl){
+        this.mName = name;
+        this.mImageUrl = imageUrl;
     }
 
-    public String getName() {
+    public String getName(){
         return mName;
     }
 
-    public void setmame(String mName) {
-        this.mName = mName;
+    public void setName(String name){
+        mName = name;
     }
 
-    public String getImageUrl() {
+    public String getImageUrl(){
         return mImageUrl;
     }
 
-    public void setImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
+    public void  setImageUrl(String imageUrl){
+        mImageUrl = imageUrl;
+    }
+
+    @Exclude
+    public String getKey(){
+        return mKey;
+    }
+
+    @Exclude
+    public void setKey(String key){
+        mKey = key;
     }
 }

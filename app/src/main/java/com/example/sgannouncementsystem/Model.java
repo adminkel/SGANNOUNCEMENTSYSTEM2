@@ -61,4 +61,5 @@ public class Model {
     public void setTime(Date time) {
         this.time = time;
     }
+
 }
